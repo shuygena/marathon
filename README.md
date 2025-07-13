@@ -38,5 +38,5 @@ docker run -it -p 8080:8080 my_app
 
 Находясь в директории src:
 ```
-docker run -it -p 8080:8080 my_app
+pytest test.py
 ```
