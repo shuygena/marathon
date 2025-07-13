@@ -1,0 +1,153 @@
+openapi: 3.0.4
+info:
+  title: Final API
+  description: API для решения финальных задач
+  version: 1.0.0
+servers:
+  - url: localhost:8080
+tags:
+  - name: Task
+    description: Операции, связанные с финальными задачами
+paths:
+  /inputs:
+    post:
+      tags:
+        - Task
+      summary: Задача создания ввода
+      description: Принимает данные в матричном формате и создает событие ввода
+      requestBody:
+        description: Данные для создания события ввода
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - view
+              properties:
+                view:
+                  type: array
+                  items: 
+                    type: array
+                    items:
+                      type: integer
+              description: Матрица данных
+        required: true
+      responses:
+        '200':
+          description: Созданное событие ввода
+          content:
+            application/json:
+              schema:
+                type: object
+                required: 
+                  - action
+                properties:
+                  action:
+                    type: string
+        '400':
+          description: Задача не решена, так как формат данных неверный
+          content:
+            application/json:
+              schema:
+                type: object
+                required: 
+                  - action
+                properties:
+                  action:
+                    type: string
+                    enum: [None]
+                    
+  /tasks:
+    post:
+      tags:
+        - Task
+      summary: Постановка задачи
+      description: Принимает данные о задаче 
+      requestBody:
+        description: Данные о задаче
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - type
+                - task
+              properties:
+                type:
+                  type: string
+                  description: Тип задачи
+                task:
+                  type: string
+                  description: Описание задачи
+        required: true
+      responses:
+        '200':
+          description: Задача принята и решена
+          content:
+            application/json:
+              schema:
+                type: object
+                required: 
+                  - answer
+                properties:
+                  answer:
+                    type: string
+        '400':
+          description: Задача не принята, так как формат данных неверный
+          
+  /tasks/last:
+    patch:
+      tags:
+        - Task
+      summary: Результат решения последней задачи
+      description: Принимает данные о результате решения последней задачи
+      requestBody:
+        description: Результат решения
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - result
+              properties:
+                result:
+                  type: string
+                  enum: [Ok, TryAgain, Fail]
+                  description: Результат
+        required: true
+      responses:
+        '200':
+          description: Данные приняты
+        '400':
+          description: Данные не приняты, так как формат данных неверный
+        '404':
+          description: Данные не приняты, так как до этого не было поставленной задачи (или ее результаты уже были приняты до этого)
+          
+  /notifications:
+    post:
+      tags:
+        - Task
+      summary: Уведомление о произведенных действиях
+      description: Принимает данные о произведенных действиях
+      requestBody:
+        description: Данные о произведенном действии
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - type
+                - desc
+              properties:
+                type:
+                  type: string
+                  description: Тип произведенного действия
+                desc:
+                  type: string
+                  description: Доп. информация о произведенном действии
+        required: true
+      responses:
+        '200':
+          description: Данные приняты
+        '400':
+          description: Данные не приняты, так как их формат неверный

@@ -1,0 +1,17 @@
+__pycache__/
+
+*.so
+
+build/
+develop-eggs/
+dist/
+.eggs/
+*.egg-info/
+*.egg
+
+.env
+.venv
+env/
+venv/
+
+.DS_Store
